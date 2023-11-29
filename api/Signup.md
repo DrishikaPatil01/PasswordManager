@@ -42,6 +42,15 @@ curl --location 'http://localhost:8080/password-manager' \
 | error.Code         |                                    |
 | error.Description  |                                    |
 
-
+### Sample Response
+```
+{
+    "status" : "SUCCESS"/"FAILIURE",
+    "error" : {
+        "code" : "",
+        "description" : ""
+    }
+}
+```
 
 
