@@ -4,6 +4,6 @@
 ![Wireframe](./assets/wireframe.png)
 
 **Main Web Pages:**
-- Login Page
+- Login Page 
 - Sign Up Page
 - Main Page
