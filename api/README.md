@@ -1,10 +1,10 @@
 # Password Manager UI
 
 **User APIs:**
-- [Signup](Signup.md)
-- [Login](Login.md)
-- [Forgot Password](ForgotPassword.md)
-- [Reset Password](ResetPassword.md)
+- [Signup](./doc/Signup.md)
+- [Login](./doc/Login.md)
+- [Forgot Password](./doc/ForgotPassword.md)
+- [Reset Password](./doc/ResetPassword.md)
 
 
 **Credential APIs:**

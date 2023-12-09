@@ -1,10 +1,10 @@
-# Signup LLD/API Contract
+# Login LLD/API Contract
 
 ## Description
-The signup api is used to create an account for the user in the password manager.
+The login api is used to login the user in the password manager.
 
 ## LLD
-![Signup Low Level Diagram](./assets/SignupLld.png)
+![Login Low Level Diagram](../assets/LoginLld.png)
 
 
 ## Request
@@ -13,7 +13,7 @@ The signup api is used to create an account for the user in the password manager
 | **Field** | **Value**                             |
 |-----------|-----------                            |
 | Base Url  | http://localhost:8080/password-manager|
-| Path      |    /user                              |
+| Path      |    /user/login                        |
 | Headers   | Content-Type: application/json        |
 
 ### Request Body
@@ -25,7 +25,7 @@ The signup api is used to create an account for the user in the password manager
 
 ### Sample Request
 ```
-curl --location 'http://localhost:8080/password-manager/user' \
+curl --location 'http://localhost:8080/password-manager/user/login' \
 --header 'Content-Type: application/json' \
 --data '{
     "email" : "email@gmail.com",
@@ -38,7 +38,10 @@ curl --location 'http://localhost:8080/password-manager/user' \
 ### Response Body
 | **Field**          | **Description**                    |
 |--------------------|------------------------------------|
-| status             | status of signup - SUCCESS/FAILED  |
+| status             | status of login  - SUCCESS/FAILED  |
+| userId             |    user's Id assigned by service   |
+| email              |    user's email                    |
+| authToken          |    used to authorize calls         |
 | error.Code         |                                    |
 | error.Description  |                                    |
 
@@ -46,6 +49,9 @@ curl --location 'http://localhost:8080/password-manager/user' \
 ```
 {
     "status" : "SUCCESS"/"FAILIURE",
+    "userId" : "e27d273a-8f9b-11ee-b9d1-0242ac120002",
+    "email" : "email@gmail.com",
+    "authToken" : "asdfoiwjoiejfakjskaj1231fkjsksdjf",
     "error" : {
         "code" : "",
         "description" : ""

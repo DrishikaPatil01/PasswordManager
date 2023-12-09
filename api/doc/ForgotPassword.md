@@ -4,7 +4,7 @@
 This api is used to change the password of the user in case user forgets the password.
 
 ## LLD
-![Forgot Password Level Diagram](./assets/ForgotPasswordLld.png)
+![Forgot Password Level Diagram](../assets/ForgotPasswordLld.png)
 
 
 ## Request
@@ -13,7 +13,7 @@ This api is used to change the password of the user in case user forgets the pas
 | **Field** | **Value**                             |
 |-----------|-----------                            |
 | Base Url  | http://localhost:8080/password-manager|
-| Path      |    /user/password/set                 |
+| Path      |    /user/fogrot-password              |
 | Headers   | Content-Type: application/json        |
 
 ### Request Body
@@ -26,7 +26,7 @@ This api is used to change the password of the user in case user forgets the pas
 
 ### Sample Request
 ```
-curl --location 'http://localhost:8080/password-manager/user/password/set' \
+curl --location 'http://localhost:8080/password-manager/user/fogot-password' \
 --header 'Content-Type: application/json' \
 --data '{
     "userId" : "e27d273a-8f9b-11ee-b9d1-0242ac120002",
