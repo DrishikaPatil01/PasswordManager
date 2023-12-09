@@ -41,7 +41,6 @@ curl --location 'http://localhost:8080/password-manager/user/login' \
 | status             | status of login  - SUCCESS/FAILED  |
 | userId             |    user's Id assigned by service   |
 | email              |    user's email                    |
-| authToken          |    used to authorize calls         |
 | error.Code         |                                    |
 | error.Description  |                                    |
 
@@ -51,7 +50,6 @@ curl --location 'http://localhost:8080/password-manager/user/login' \
     "status" : "SUCCESS"/"FAILIURE",
     "userId" : "e27d273a-8f9b-11ee-b9d1-0242ac120002",
     "email" : "email@gmail.com",
-    "authToken" : "asdfoiwjoiejfakjskaj1231fkjsksdjf",
     "error" : {
         "code" : "",
         "description" : ""
