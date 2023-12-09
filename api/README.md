@@ -3,6 +3,7 @@
 **User APIs:**
 - [Signup](./doc/Signup.md)
 - [Login](./doc/Login.md)
+- [Logout](./doc/Logout.md)
 - [Forgot Password](./doc/ForgotPassword.md)
 - [Reset Password](./doc/ResetPassword.md)
 
