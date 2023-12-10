@@ -25,7 +25,7 @@ The login api is used to login the user in the password manager.
 
 ### Sample Request
 ```
-curl --location 'http://localhost:8080/password-manager/user/login' \
+curl --location --request PUT 'http://localhost:8080/password-manager/user/login' \
 --header 'Content-Type: application/json' \
 --data '{
     "email" : "email@gmail.com",

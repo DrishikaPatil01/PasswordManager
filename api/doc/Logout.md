@@ -26,7 +26,7 @@ The logout api is used to logout the user in the password manager.
 
 ### Sample Request
 ```
-curl --location 'http://localhost:8080/password-manager/user/logout' \
+curl --location --request PUT 'http://localhost:8080/password-manager/user/logout' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Basic dkfjlkdsjflksdjl' \
 --data '{
