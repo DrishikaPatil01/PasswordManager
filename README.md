@@ -15,5 +15,7 @@
 
 ## Cache Model
 ![Cache Model](./assets/cacheModel.png)
-The user's authToken and expiry will be stored in the redis cache in the form of a hashmap, the userId being the key to the hasmap.
+- The user's authToken and expiry will be stored in the redis cache in the form of a hashmap, the userId being the key to the hasmap. 
+- Once a user's authToken is expired and user logs in the value of the hashmap gets updated with new authToken and expiry. 
+- If the user logs out, that entry is deleted from the hashmap
 
