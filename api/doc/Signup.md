@@ -25,7 +25,7 @@ The signup api is used to create an account for the user in the password manager
 
 ### Sample Request
 ```
-curl --location 'http://localhost:8080/password-manager' \
+curl --location 'http://localhost:8080/password-manager/user' \
 --header 'Content-Type: application/json' \
 --data '{
     "email" : "email@gmail.com",
