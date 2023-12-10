@@ -13,3 +13,7 @@
 1) User : Stores User's login data 
 2) Credentials : Stores Credentials in encrypted form
 
+## Cache Model
+![Cache Model](./assets/cacheModel.png)
+The user's authToken and expiry will be stored in the redis cache in the form of a hashmap, the userId being the key to the hasmap.
+
