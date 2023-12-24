@@ -12,8 +12,6 @@ services:
       MYSQL_DATABASE: passwordManagerService
       MYSQL_USER: developers
       MYSQL_PASSWORD_FILE: /run/secrets/db_developer_password
-      MYSQL_ALLOW_EMPTY_PASSWORD: true
-      MYSQL_INITIALISE_INSECURE: false
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
