@@ -1,0 +1,38 @@
+services:
+  service:
+    build: ./api
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+  
+  db:
+    image: mysql:8.2.0
+    environment:
+      MYSQL_DATABASE: passwordManagerService
+      MYSQL_USER: developers
+      MYSQL_PASSWORD_FILE: /run/secrets/db_developer_password
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    ports:
+      - 3306:3306
+    volumes:
+      - ./database/scripts/init.sql:/docker-entrypoint-initdb.d/0.sql
+      - ./database/state:/var/lib/mysql
+    secrets:
+      - db_root_password
+      - db_developer_password
+
+  # web:
+  #   build: ./ui
+  #   ports:
+  #     - 8081:8080
+  #   depends_on:
+  #     - service
+
+secrets:
+  db_developer_password:
+    file: ./database/secrets/db_developer_password.txt
+  db_root_password:
+    file: ./database/secrets/db_root_password.txt
