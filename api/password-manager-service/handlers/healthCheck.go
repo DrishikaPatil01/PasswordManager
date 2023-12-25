@@ -6,5 +6,5 @@ import (
 )
 
 func HealthCheck(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, "Healthy Upstream")
+	c.JSON(http.StatusOK, "Healthy Upstream")
 }
