@@ -23,5 +23,5 @@
 ## Running the password-manager
 1) Add the secret files (db_developer_password.txt, db_root_password.txt) in /api/secrets folders
 
-2) Run `docker compose up` in PasswordManager director
+2) Run `docker compose up` in PasswordManager directory
 

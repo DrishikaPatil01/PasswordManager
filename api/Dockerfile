@@ -2,15 +2,14 @@ FROM golang:1.21.5
 
 WORKDIR /app
 
+EXPOSE 8080
+
 COPY /password-manager-service/go.mod /password-manager-service/go.sum ./
 
 RUN go mod download
 
 COPY ./password-manager-service ./
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o /docker-gs-ping
+RUN go build -o /password-manager-service
 
-EXPOSE 8080
-
-# Run
-CMD ["/docker-gs-ping"]
+CMD [ "/password-manager-service" ]
