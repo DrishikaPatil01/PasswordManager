@@ -4,11 +4,9 @@ WORKDIR /app
 
 EXPOSE 8080
 
-COPY /password-manager-service/go.mod /password-manager-service/go.sum ./
+COPY ./password-manager-service ./
 
 RUN go mod download
-
-COPY ./password-manager-service ./
 
 RUN go build -o /password-manager-service
 

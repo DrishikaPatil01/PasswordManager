@@ -1,3 +1,4 @@
 *.excalidraw
 .vscode
-api/secrets/
+database/secrets
+database/state
