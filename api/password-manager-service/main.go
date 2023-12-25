@@ -9,5 +9,5 @@ import (
 func main() {
 	router := gin.Default()
 	router.GET("/health", handlers.HealthCheck)
-	router.Run("localhost:8080")
+	router.Run(":8080")
 }

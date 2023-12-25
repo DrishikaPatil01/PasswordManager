@@ -25,3 +25,6 @@
 
 2) Run `docker compose up` in PasswordManager directory
 
+3) Run the following curl to ensure service is up and running
+`curl --location http://127.0.0.1:8080/health`
+

@@ -2,7 +2,7 @@ services:
   service:
     build: ./api
     ports:
-      - 127.0.0.1:8080:8080
+      - 8080:8080
     depends_on:
       - db
   
@@ -16,7 +16,7 @@ services:
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     ports:
-      - 127.0.0.1:3306:3306
+      - 3306:3306
     volumes:
       - ./database/scripts/init.sql:/docker-entrypoint-initdb.d/0.sql
       - ./database/state:/var/lib/mysql
