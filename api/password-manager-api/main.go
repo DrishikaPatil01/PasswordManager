@@ -1,17 +1,17 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
 	"password-manager-service/handlers"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 )
 
-var router = gin.Default()
-
 func main() {
-	initRouter()
-}
+	router := gin.Default()
 
-func initRouter() {
+	router.Use(cors.Default()) // remove this in production.
+
 	router.GET("/health", handlers.HealthCheck)
 	router.Run(":8080")
 }

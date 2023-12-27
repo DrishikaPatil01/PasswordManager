@@ -1,5 +1,16 @@
 # Password Manager
 
+## Local Environment
+### Spin up local enviornment
+``` terminal
+docker compose up -d
+```
+
+### Bring down the local environment
+``` terminal
+docker compose down && docker rmi passwordmanager-api && docker rmi passwordmanager-ui
+```
+
 ## High Level Diagram
 ![High Level Diagram](./assets/hld.png)
 
