@@ -4,10 +4,10 @@ WORKDIR /app
 
 EXPOSE 8080
 
-COPY ./password-manager-service ./
+COPY ./password-manager-api ./
 
 RUN go mod download
 
-RUN go build -o /password-manager-service
+RUN go build -o /password-manager-api
 
-CMD [ "/password-manager-service" ]
+CMD [ "/password-manager-api" ]

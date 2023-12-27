@@ -1,5 +1,5 @@
 services:
-  service:
+  api:
     build: ./api
     ports:
       - 8080:8080
@@ -10,9 +10,11 @@ services:
     image: mysql:8.2.0
     environment:
       MYSQL_DATABASE: passwordManagerService
-      MYSQL_USER: developers
-      MYSQL_PASSWORD_FILE: /run/secrets/db_developer_password
-      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_USER: dev
+      MYSQL_PASSWORD: developer
+      MYSQL_ROOT_PASSWORD: root
+      # MYSQL_PASSWORD_FILE: /run/secrets/db_developer_password
+      # MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     ports:
@@ -20,19 +22,19 @@ services:
     volumes:
       - ./database/scripts/init.sql:/docker-entrypoint-initdb.d/0.sql
       - ./database/state:/var/lib/mysql
-    secrets:
-      - db_root_password
-      - db_developer_password
+    # secrets:
+    #   - db_root_password
+    #   - db_developer_password
 
-  # web:
-  #   build: ./ui
-  #   ports:
-  #     - 8081:8080
-  #   depends_on:
-  #     - service
+  ui:
+    build: ./ui
+    ports:
+      - 3000:3000
+    depends_on:
+      - api
 
-secrets:
-  db_developer_password:
-    file: ./database/secrets/db_developer_password.txt
-  db_root_password:
-    file: ./database/secrets/db_root_password.txt
+# secrets:
+#   db_developer_password:
+#     file: ./database/secrets/db_developer_password.txt
+#   db_root_password:
+#     file: ./database/secrets/db_root_password.txt
