@@ -30,6 +30,7 @@ services:
       DB_PASSWORD: root
       DB_LINK: passwordmanager-db-1:3306
       DATABASE: passwordManagerService
+      SIGNING_KEY: passwordManagerService
 
   ui:
     build: ./ui

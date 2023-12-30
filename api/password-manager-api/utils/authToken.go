@@ -24,3 +24,15 @@ func CreateToken(userId string) (string, error) {
 
 	return ss, nil
 }
+func ValidateJWT(tokenString string) (*jwt.Token, error) {
+	secret := os.Getenv("SIGNING_KEY")
+
+	return jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		// Don't forget to validate the alg is what you expect:
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}
+
+		return []byte(secret), nil
+	})
+}
