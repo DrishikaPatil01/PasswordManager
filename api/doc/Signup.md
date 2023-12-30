@@ -12,8 +12,8 @@ The signup api is used to create an account for the user in the password manager
 ### Path
 | **Field** | **Value**                             |
 |-----------|-----------                            |
-| Base Url  | http://localhost:8080/password-manager|
-| Path      |    /user                              |
+| Base Url  | http://localhost:8080/                |
+| Path      |    /signup                            |
 | Headers   | Content-Type: application/json        |
 
 ### Request Body
@@ -28,8 +28,9 @@ The signup api is used to create an account for the user in the password manager
 curl --location 'http://localhost:8080/password-manager/user' \
 --header 'Content-Type: application/json' \
 --data '{
-    "email" : "email@gmail.com",
-    "password" : "abc123@Abc"
+    "email": "email@gmail.com",
+    "password": "abc123@Abc",
+    "username": "example"
 }'
 ```
 
@@ -39,17 +40,12 @@ curl --location 'http://localhost:8080/password-manager/user' \
 | **Field**          | **Description**                    |
 |--------------------|------------------------------------|
 | status             | status of signup - SUCCESS/FAILED  |
-| error.Code         |                                    |
-| error.Description  |                                    |
+| msg                |                                    |
 
 ### Sample Response
 ```
 {
-    "status" : "SUCCESS"/"FAILIURE",
-    "error" : {
-        "code" : "",
-        "description" : ""
-    }
+    "msg" : "user added"
 }
 ```
 

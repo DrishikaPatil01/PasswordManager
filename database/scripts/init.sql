@@ -4,6 +4,7 @@ use passwordManagerService;
 
 create table if not exists USER(
     USER_ID varchar(255) NOT NULL, 
+    EMAIL_ID varchar(255) NOT NULL,
     USERNAME varchar(255) NOT NULL, 
     PASSWORD varchar(255) NOT NULL, 
     PRIMARY KEY (USER_ID) 

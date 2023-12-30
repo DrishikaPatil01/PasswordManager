@@ -1,11 +1,4 @@
-services:
-  api:
-    build: ./api
-    ports:
-      - 8080:8080
-    depends_on:
-      - db
-  
+services:  
   db:
     image: mysql:8.2.0
     environment:
@@ -21,10 +14,22 @@ services:
       - 3306:3306
     volumes:
       - ./database/scripts/init.sql:/docker-entrypoint-initdb.d/0.sql
-      - ./database/state:/var/lib/mysql
+      # - ./database/state:/var/lib/mysql
     # secrets:
     #   - db_root_password
     #   - db_developer_password
+  
+  api:
+    build: ./api
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    environment:
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_LINK: passwordmanager-db-1:3306
+      DATABASE: passwordManagerService
 
   ui:
     build: ./ui
