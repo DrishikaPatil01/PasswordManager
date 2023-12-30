@@ -63,3 +63,23 @@ func (conn *DatabaseConnection) AddUser(user types.UserData) error {
 
 	return nil
 }
+
+func (conn *DatabaseConnection) GetUserByEmail(email string) (types.UserData, error) {
+
+	var user types.UserData
+
+	results, err := conn.db.Query(queryUserByEmail, email)
+	if err != nil {
+		log.Println(err.Error())
+		return user, err
+	}
+
+	for results.Next() {
+		err = results.Scan(&user.UserId, &user.Email, &user.Username, &user.Password)
+		if err != nil {
+			log.Printf("Could not process the row data: %s\n", err)
+		}
+	}
+
+	return user, nil
+}

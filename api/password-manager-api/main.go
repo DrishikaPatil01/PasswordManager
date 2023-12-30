@@ -25,7 +25,7 @@ func main() {
 	router.GET("/health", handlers.HealthCheck)
 	router.POST("/signup", handlers.Signup(&conn))
 	router.POST("/forgot-password", handlers.HealthCheck)
-	router.PUT("/login", handlers.HealthCheck)
+	router.PUT("/login", handlers.Login(&conn))
 	router.DELETE("/user/logout", handlers.HealthCheck)
 	router.POST("/user/reset-password", handlers.HealthCheck)
 
