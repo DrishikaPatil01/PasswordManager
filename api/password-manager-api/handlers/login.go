@@ -44,8 +44,6 @@ func Login(conn *database.DatabaseConnection) gin.HandlerFunc {
 
 		c.Writer.Header().Set("SessionToken", sessionToken)
 		c.JSON(http.StatusOK, user)
-
-		conn.ValidateSession(user.UserId, sessionToken)
 	}
 	return gin.HandlerFunc(fn)
 }

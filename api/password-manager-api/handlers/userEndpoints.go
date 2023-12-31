@@ -1,11 +1,10 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"password-manager-service/database"
-	"password-manager-service/utils"
-
-	"log"
+	"password-manager-service/types"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,23 +24,35 @@ func GetAllUsers(conn *database.DatabaseConnection) gin.HandlerFunc {
 
 func TestAuthToken(conn *database.DatabaseConnection) gin.HandlerFunc {
 	fn := func(c *gin.Context) {
-		token := c.GetHeader("Auth_Token")
+		var requestUser types.UserData
 
-		validatedToken, err := utils.ValidateJWT(token)
+		if err := c.BindJSON(&requestUser); err != nil {
+			c.JSON(http.StatusBadRequest, "could not process request")
+			return
+		}
+
+		user, err := conn.GetUserByEmail(requestUser.Email)
 
 		if err != nil {
-			log.Print("Error while validating token :", err)
+			c.JSON(http.StatusInternalServerError, err.Error())
+			return
+		}
+
+		sessionToken := c.GetHeader("SessionToken")
+		fmt.Println(user.UserId, sessionToken)
+
+		isValid, err := conn.ValidateSession(user.UserId, sessionToken)
+
+		if err != nil {
+			fmt.Println("Error while validating session error:", err)
 			c.JSON(http.StatusInternalServerError, "Error while validating token")
-			return
-		}
-		if !validatedToken.Valid {
-			log.Print("Invalid token :", err)
-			c.JSON(http.StatusUnauthorized, "Invalid Token")
-			return
 		}
 
-		c.JSON(http.StatusOK, "Tested authToken successfully!")
+		if !isValid {
+			c.JSON(http.StatusUnauthorized, "Invalid Session token")
+		} else {
+			c.JSON(http.StatusOK, "Validated session successfully")
+		}
 	}
-
 	return gin.HandlerFunc(fn)
 }
