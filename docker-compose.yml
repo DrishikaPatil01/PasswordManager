@@ -31,6 +31,8 @@ services:
       DB_LINK: passwordmanager-db-1:3306
       DATABASE: passwordManagerService
       SIGNING_KEY: passwordManagerService
+      REDIS_LINK: cache:6379
+      REDIS_PASSWORD: cache
 
   ui:
     build: ./ui
@@ -38,6 +40,14 @@ services:
       - 3000:3000
     depends_on:
       - api
+  
+  cache:
+    image: redis:7.2.3
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass cache
+    volumes: 
+      - ./cache/state:/data
 
 # secrets:
 #   db_developer_password:

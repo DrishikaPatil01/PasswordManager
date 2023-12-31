@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"log"
+	"fmt"
 	"net/http"
 	"password-manager-service/database"
 	"password-manager-service/types"
@@ -13,14 +13,13 @@ import (
 func Login(conn *database.DatabaseConnection) gin.HandlerFunc {
 
 	fn := func(c *gin.Context) {
+		var requestUser types.UserData
 
-		requestUser := validate(c)
-
-		if (types.UserData{}) == requestUser {
+		if err := c.BindJSON(&requestUser); err != nil {
+			c.JSON(http.StatusBadRequest, "could not process request")
 			return
 		}
 
-		//Check if emailExists and encrypted password matches this password
 		user, err := conn.GetUserByEmail(requestUser.Email)
 
 		if err != nil {
@@ -35,37 +34,18 @@ func Login(conn *database.DatabaseConnection) gin.HandlerFunc {
 			return
 		}
 
-		token, err := utils.CreateToken(user.UserId)
+		sessionToken, err := conn.UpdateSession(user.UserId)
 
 		if err != nil {
-			log.Println("Error while generating token", err)
-			c.JSON(http.StatusInternalServerError, "Error processing request")
+			fmt.Println("Error while Creating session :", err)
+			c.JSON(http.StatusInternalServerError, "Error creating session")
 			return
-		} else {
-			c.Writer.Header().Set("auth_token", token)
-			c.JSON(http.StatusOK, user)
 		}
+
+		c.Writer.Header().Set("SessionToken", sessionToken)
+		c.JSON(http.StatusOK, user)
+
+		conn.ValidateSession(user.UserId, sessionToken)
 	}
 	return gin.HandlerFunc(fn)
-}
-
-func validate(c *gin.Context) (user types.UserData) {
-
-	//validate
-	if err := c.BindJSON(&user); err != nil {
-		c.JSON(http.StatusBadRequest, "could not process request")
-		return
-	}
-
-	if user.Email == "" {
-		c.JSON(http.StatusBadRequest, "Email is required to login user")
-		return types.UserData{}
-	}
-
-	if user.Password == "" {
-		c.JSON(http.StatusBadRequest, "Password is required to login user")
-		return types.UserData{}
-	}
-
-	return
 }
