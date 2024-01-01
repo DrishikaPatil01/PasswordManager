@@ -21,9 +21,9 @@ func NewConnection() (DatabaseConnection, error) {
 	redisLink := os.Getenv("REDIS_LINK")
 	redisPassword := os.Getenv("REDIS_PASSWORD")
 
-	db, dbErr := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s", dbUser, dbPassword, dbLink, database))
-	if dbErr != nil {
-		return DatabaseConnection{}, dbErr
+	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s", dbUser, dbPassword, dbLink, database))
+	if err != nil {
+		return DatabaseConnection{}, err
 	}
 
 	rdb := redis.NewClient(&redis.Options{
