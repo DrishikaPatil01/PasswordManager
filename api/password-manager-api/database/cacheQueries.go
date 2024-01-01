@@ -12,16 +12,13 @@ func (conn *DatabaseConnection) UpdateSession(userId string) (string, error) {
 	authToken := uuid.New().String()
 	expiryTime := (time.Now().Add(10 * time.Minute)).Format(time.RFC3339)
 
-	val, err := conn.rdb.HSet(context.Background(),
+	_, err := conn.rdb.HSet(context.Background(),
 		userId,
 		[]string{"userId", userId, "sessionToken", authToken, "expiry", expiryTime}).Result()
 
 	if err != nil {
 		return "", err
 	}
-
-	fmt.Println("Val after updating session: ", val)
-
 	return authToken, nil
 }
 

@@ -32,7 +32,7 @@ func main() {
 	router.GET("/user/credentials", handlers.HealthCheck)
 	router.DELETE("/user/credentials", handlers.HealthCheck)
 	router.PUT("/user/credentials", handlers.HealthCheck)
-	router.POST("/user/credentials", handlers.HealthCheck)
+	router.POST("/user/credentials", handlers.AddCredential(&conn))
 
 	//TODO: Remove this later
 	router.GET("/users/getall", handlers.GetAllUsers(&conn))
