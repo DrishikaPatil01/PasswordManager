@@ -33,6 +33,7 @@ services:
       SIGNING_KEY: passwordManagerService
       REDIS_LINK: cache:6379
       REDIS_PASSWORD: cache
+      SECRET_KEY: N1PCdw3M2B1TfJhoaY2mL736p2vCUc47
 
   ui:
     build: ./ui

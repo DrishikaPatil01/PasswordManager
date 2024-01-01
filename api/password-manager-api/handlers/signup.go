@@ -30,7 +30,7 @@ func Signup(conn *database.DatabaseConnection) gin.HandlerFunc {
 			return
 		}
 
-		user.Password = utils.EncryptPassword(user.Password)
+		user.Password = utils.EncryptUserPassword(user.Password)
 		if err := conn.AddUser(user); err != nil {
 			c.JSON(http.StatusInternalServerError, "error occured while adding user")
 		} else {
