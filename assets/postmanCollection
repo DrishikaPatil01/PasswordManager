@@ -1,0 +1,400 @@
+{
+	"info": {
+		"_postman_id": "0df2d22b-10b5-4780-b206-91380761fc4c",
+		"name": "Password Manager",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17012676"
+	},
+	"item": [
+		{
+			"name": "Signup",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"email2@gmail.com\",\r\n    \"password\": \"abc123@Abc\",\r\n    \"username\": \"example\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"sessionToken\", pm.response.headers.get(\"sessionToken\"));\r",
+							"\r",
+							"response = pm.response.json()\r",
+							"pm.collectionVariables.set(\"userId\", response.user_id)\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"email2@gmail.com\",\r\n    \"password\": \"abc123@Abc\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test Session Token",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Sessiontoken",
+						"value": "{{sessionToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"email2@gmail.com\",\r\n    \"password\": \"abc123@Abc\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/testSessionToken",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"testSessionToken"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Credentials",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"sessionToken\", pm.response.headers.get(\"sessionToken\"));\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Sessiontoken",
+						"value": "{{sessionToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user_id\": \"{{userId}}\",\r\n    \"title\": \"Emails\",\r\n    \"username\": \"example\",\r\n    \"password\": \"96967981729eeade52732d9bdf3e2f80154709da63b585dc5a3c31d53ca6c7dc\",\r\n    \"optional\": \"gmail, yahoo, hotmail\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/{{userId}}/credentials",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"{{userId}}",
+						"credentials"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Credentials",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"sessionToken\", pm.response.headers.get(\"sessionToken\"));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Sessiontoken",
+						"value": "{{sessionToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "// {\r\n//     \"user_id\": \"{{userId}}\",\r\n//     \"title\": \"Emails\",\r\n//     \"username\": \"example\",\r\n//     \"password\": \"96967981729eeade52732d9bdf3e2f80154709da63b585dc5a3c31d53ca6c7dc\",\r\n//     \"optional\": \"gmail, yahoo, hotmail\"\r\n// }"
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/{{userId}}/credentials",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"{{userId}}",
+						"credentials"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Credentials",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"sessionToken\", pm.response.headers.get(\"sessionToken\"));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Sessiontoken",
+						"value": "{{sessionToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "// {\r\n//     \"user_id\": \"{{userId}}\",\r\n//     \"title\": \"Emails\",\r\n//     \"username\": \"example\",\r\n//     \"password\": \"96967981729eeade52732d9bdf3e2f80154709da63b585dc5a3c31d53ca6c7dc\",\r\n//     \"optional\": \"gmail, yahoo, hotmail\"\r\n// }"
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/{{userId}}/credentials/e7f1cc12-3b0d-4128-a575-45753ee12002",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"{{userId}}",
+						"credentials",
+						"e7f1cc12-3b0d-4128-a575-45753ee12002"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Credentials",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"sessionToken\", pm.response.headers.get(\"sessionToken\"));\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Sessiontoken",
+						"value": "{{sessionToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user_id\": \"{{userId}}\",\r\n    \"title\": \"gaming-site\",\r\n    \"username\": \"gamer101\",\r\n    \"password\": \"96967981729eeade52732d9bdf3e2f80154709da63b585dc5a3c31d53ca6c7dc\",\r\n    \"optional\": \"xbox\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/{{userId}}/credentials/0384e790-bc9f-43cd-92d6-d17b80d4e13e",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"{{userId}}",
+						"credentials",
+						"0384e790-bc9f-43cd-92d6-d17b80d4e13e"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Credentials By Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"sessionToken\", pm.response.headers.get(\"sessionToken\"));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Sessiontoken",
+						"value": "{{sessionToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "// {\r\n//     \"user_id\": \"{{userId}}\",\r\n//     \"title\": \"Emails\",\r\n//     \"username\": \"example\",\r\n//     \"password\": \"96967981729eeade52732d9bdf3e2f80154709da63b585dc5a3c31d53ca6c7dc\",\r\n//     \"optional\": \"gmail, yahoo, hotmail\"\r\n// }"
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/{{userId}}/credentials/e7f1cc12-3b0d-4128-a575-45753ee12002",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"{{userId}}",
+						"credentials",
+						"e7f1cc12-3b0d-4128-a575-45753ee12002"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "sessionToken",
+			"value": "51158865-fde4-4bf4-9589-85f6c17d598b"
+		},
+		{
+			"key": "sessionToken",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"key": "userId",
+			"value": ""
+		},
+		{
+			"key": "credentialsId",
+			"value": ""
+		}
+	]
+}

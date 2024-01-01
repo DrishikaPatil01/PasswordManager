@@ -23,16 +23,18 @@ func main() {
 	router.Use(cors.Default())
 
 	router.GET("/health", handlers.HealthCheck)
-	router.POST("/signup", handlers.Signup(&conn))
+	router.POST("/signup", handlers.Signup(&conn)) //done
 	router.POST("/forgot-password", handlers.HealthCheck)
-	router.PUT("/login", handlers.Login(&conn))
+	router.PUT("/login", handlers.Login(&conn)) //done
 	router.DELETE("/user/logout", handlers.HealthCheck)
 	router.POST("/user/reset-password", handlers.HealthCheck)
 
-	router.GET("/user/credentials", handlers.HealthCheck)
-	router.DELETE("/user/credentials", handlers.HealthCheck)
-	router.PUT("/user/credentials", handlers.HealthCheck)
-	router.POST("/user/credentials", handlers.AddCredential(&conn))
+	router.GET("/user/:userId/credentials/:id", handlers.GetCredentials(&conn)) //done
+	router.GET("/user/:userId/credentials", handlers.GetAllCredentials(&conn))  //done
+	router.DELETE("/user/:userId/credentials/:id", handlers.DeleteCredentialsById(&conn))
+	router.DELETE("/user/:userId/credentials/", handlers.HealthCheck)
+	router.PUT("/user/:userId/credentials/:id", handlers.UpdateCredential(&conn)) //done
+	router.POST("/user/:userId/credentials", handlers.AddCredential(&conn))       //done
 
 	//TODO: Remove this later
 	router.GET("/users/getall", handlers.GetAllUsers(&conn))
