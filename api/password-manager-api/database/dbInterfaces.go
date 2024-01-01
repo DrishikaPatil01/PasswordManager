@@ -17,6 +17,6 @@ type IUser interface {
 }
 
 type ISession interface {
-	UpdateSession(string) //userId and sessionToken
+	UpdateSession(string)
 	ValidateSession(string, string)
 }
