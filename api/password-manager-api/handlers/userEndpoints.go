@@ -22,7 +22,7 @@ func GetAllUsers(conn *database.DatabaseConnection) gin.HandlerFunc {
 	return gin.HandlerFunc(fn)
 }
 
-func TestAuthToken(conn *database.DatabaseConnection) gin.HandlerFunc {
+func TestSessionToken(conn *database.DatabaseConnection) gin.HandlerFunc {
 	fn := func(c *gin.Context) {
 		var requestUser types.UserData
 

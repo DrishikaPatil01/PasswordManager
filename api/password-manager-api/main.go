@@ -36,7 +36,7 @@ func main() {
 
 	//TODO: Remove this later
 	router.GET("/users/getall", handlers.GetAllUsers(&conn))
-	router.GET("/testAuthToken", handlers.TestAuthToken(&conn))
+	router.GET("/testSessionToken", handlers.TestSessionToken(&conn))
 
 	router.Run(":8080")
 }
