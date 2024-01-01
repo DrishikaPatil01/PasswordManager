@@ -29,9 +29,10 @@ func main() {
 	router.DELETE("/user/logout", handlers.HealthCheck)
 	router.POST("/user/reset-password", handlers.HealthCheck)
 
-	router.GET("/user/:userId/credentials/:id", handlers.GetCredentials(&conn)) //done
-	router.GET("/user/:userId/credentials", handlers.GetAllCredentials(&conn))  //done
-	router.DELETE("/user/:userId/credentials/:id", handlers.DeleteCredentialsById(&conn))
+	//Remove userId in path
+	router.GET("/user/:userId/credentials/:id", handlers.GetCredentials(&conn))           //done
+	router.GET("/user/:userId/credentials", handlers.GetAllCredentials(&conn))            //done
+	router.DELETE("/user/:userId/credentials/:id", handlers.DeleteCredentialsById(&conn)) //convert to list
 	router.DELETE("/user/:userId/credentials/", handlers.HealthCheck)
 	router.PUT("/user/:userId/credentials/:id", handlers.UpdateCredential(&conn)) //done
 	router.POST("/user/:userId/credentials", handlers.AddCredential(&conn))       //done

@@ -30,7 +30,7 @@ func Login(conn *database.DatabaseConnection) gin.HandlerFunc {
 		requestUser.Password = utils.EncryptUserPassword(requestUser.Password)
 
 		if user.Password != requestUser.Password {
-			c.JSON(http.StatusBadRequest, "invalid email or password")
+			c.JSON(http.StatusUnauthorized, "invalid email or password")
 			return
 		}
 

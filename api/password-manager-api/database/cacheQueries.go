@@ -8,6 +8,7 @@ import (
 	"github.com/google/uuid"
 )
 
+// Extend expiry instead of creating new one
 func (conn *DatabaseConnection) UpdateSession(userId string) (string, error) {
 	authToken := uuid.New().String()
 	expiryTime := (time.Now().Add(10 * time.Minute)).Format(time.RFC3339)
@@ -31,6 +32,7 @@ func (conn *DatabaseConnection) ValidateSession(userId string, sessionId string)
 		return false, err
 	}
 
+	//REmove userId mapping and set sessionToken as primary key, only check expiry
 	if userId == session["userId"] &&
 		sessionId == session["sessionToken"] &&
 		time.Now().Before(expiryTime) {
