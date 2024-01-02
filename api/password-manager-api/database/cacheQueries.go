@@ -19,14 +19,14 @@ func (conn *DatabaseConnection) CreateSession(userId string) (string, error) {
 	return sessionToken, err
 }
 
-func (conn *DatabaseConnection) UpdateSession(sessionId string) (string, error) {
+func (conn *DatabaseConnection) UpdateSession(sessionId string) error {
 	expiryTime := (time.Now().Add(10 * time.Minute)).Format(time.RFC3339)
 
 	_, err := conn.rdb.HSet(context.Background(),
 		sessionId,
 		[]string{"expiry", expiryTime}).Result()
 
-	return sessionId, err
+	return err
 }
 
 func (conn *DatabaseConnection) ValidateSession(sessionId string) (bool, string, error) {
