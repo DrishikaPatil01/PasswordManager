@@ -57,9 +57,27 @@ func (conn *DatabaseConnection) AddUser(user types.UserData) error {
 
 	// query := fmt.Sprintf("SELECT * FROM USER WHERE USERNAME = '?'", uname)
 	_, err := conn.db.Query(insertUser, user.UserId, user.Email, user.Username, user.Password)
+
+	return err
+}
+
+func (conn *DatabaseConnection) GetUserByEmail(email string) (types.UserData, error) {
+
+	var user types.UserData
+
+	results, err := conn.db.Query(queryUserByEmail, email)
 	if err != nil {
-		return err
+		log.Println(err.Error())
+		return user, err
 	}
 
-	return nil
+	for results.Next() {
+		err = results.Scan(&user.UserId, &user.Email, &user.Username, &user.Password)
+		if err != nil {
+			log.Printf("Could not process the row data: %s\n", err)
+			break
+		}
+	}
+
+	return user, err
 }

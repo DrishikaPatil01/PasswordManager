@@ -16,7 +16,7 @@ type IUser interface {
 	UpdateUser(string, string)
 }
 
-type IAuthentication interface {
-	AddUser(string, string)
-	GetUser(string, string)
+type ISession interface {
+	UpdateSession(string)
+	ValidateSession(string, string)
 }

@@ -4,26 +4,37 @@ import (
 	"database/sql"
 	"fmt"
 	"os"
+
+	"github.com/go-redis/redis/v8"
 )
 
 type DatabaseConnection struct {
-	db *sql.DB
+	db  *sql.DB
+	rdb *redis.Client
 }
 
 func NewConnection() (DatabaseConnection, error) {
-
 	dbUser := os.Getenv("DB_USER")
 	dbPassword := os.Getenv("DB_PASSWORD")
 	dbLink := os.Getenv("DB_LINK")
 	database := os.Getenv("DATABASE")
+	redisLink := os.Getenv("REDIS_LINK")
+	redisPassword := os.Getenv("REDIS_PASSWORD")
 
 	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s", dbUser, dbPassword, dbLink, database))
 	if err != nil {
 		return DatabaseConnection{}, err
 	}
 
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     redisLink,
+		Password: redisPassword,
+		DB:       0,
+	})
+
 	return DatabaseConnection{
-		db: db,
+		db:  db,
+		rdb: rdb,
 	}, nil
 }
 
