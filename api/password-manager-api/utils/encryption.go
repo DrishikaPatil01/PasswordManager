@@ -52,17 +52,20 @@ func EncryptCredentialsPassword(plaintext string) (string, error) {
 func DecryptCredentialsPassword(cipherstring string) (string, error) {
 	aes, err := aes.NewCipher([]byte(secretKey))
 	if err != nil {
+		fmt.Println("Error while forming aes cipher")
 		return "", err
 	}
 
 	gcm, err := cipher.NewGCM(aes)
 	if err != nil {
+		fmt.Println("Error while forming GCM")
 		return "", err
 	}
 
 	ciphertext, err := base64.StdEncoding.DecodeString(cipherstring)
 
 	if err != nil {
+		fmt.Println("Error while decoding")
 		return "", err
 	}
 
@@ -71,6 +74,7 @@ func DecryptCredentialsPassword(cipherstring string) (string, error) {
 
 	plaintext, err := gcm.Open(nil, []byte(nonce), []byte(ciphertext), nil)
 	if err != nil {
+		fmt.Println("Error while decrypting")
 		return "", err
 	}
 

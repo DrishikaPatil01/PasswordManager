@@ -10,7 +10,6 @@ type UserData struct {
 type CredentialData struct {
 	CredentialId string `json:"credential_id"`
 	Title        string `json:"title"`
-	UserId       string `json:"user_id"`
 	Username     string `json:"username"`
 	Password     string `json:"password"`
 	Optional     string `json:"optional"`

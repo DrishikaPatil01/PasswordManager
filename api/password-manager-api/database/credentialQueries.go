@@ -12,18 +12,18 @@ import (
 )
 
 const (
-	queryAllCredentials  string = "SELECT * FROM CREDENTIALS WHERE USER_ID=?"
-	queryCredentialsById string = "SELECT * FROM CREDENTIALS WHERE CREDENTIAL_ID=?"
+	queryAllCredentials  string = "SELECT CREDENTIAL_ID, USERNAME, PASSWORD, OPTIONAL, TITLE FROM CREDENTIALS WHERE USER_ID=?"
+	queryCredentialsById string = "SELECT CREDENTIAL_ID, USERNAME, PASSWORD, OPTIONAL, TITLE FROM CREDENTIALS WHERE CREDENTIAL_ID=?"
 	insertCredential     string = "INSERT INTO CREDENTIALS (CREDENTIAL_ID, USER_ID, USERNAME, PASSWORD, OPTIONAL, TITLE) VALUES (?, ?, ?, ?, ?, ?)"
 	updateCredential     string = "UPDATE CREDENTIALS SET USERNAME=?, PASSWORD=?, OPTIONAL=?, TITLE=? WHERE CREDENTIAL_ID=?"
 	deleteCredential     string = "DELETE FROM CREDENTIALS WHERE CREDENTIAL_ID=?"
 )
 
-func (conn *DatabaseConnection) AddCredential(credentials *types.CredentialData) error {
+func (conn *DatabaseConnection) AddCredential(userId string, credentials *types.CredentialData) error {
 	credentials.CredentialId = uuid.NewString()
 
 	_, err := conn.db.ExecContext(context.Background(), insertCredential, credentials.CredentialId,
-		credentials.UserId, credentials.Username, credentials.Password, credentials.Optional, credentials.Title)
+		userId, credentials.Username, credentials.Password, credentials.Optional, credentials.Title)
 
 	return err
 }
@@ -47,7 +47,7 @@ func (conn *DatabaseConnection) GetAllCredentials(userId string) ([]types.Creden
 	for results.Next() {
 		var credential types.CredentialData
 
-		err := results.Scan(&credential.CredentialId, &credential.UserId, &credential.Username, &credential.Password, &credential.Optional, &credential.Title)
+		err := results.Scan(&credential.CredentialId, &credential.Username, &credential.Password, &credential.Optional, &credential.Title)
 		if err != nil {
 			log.Printf("Could not process the row data: %s\n", err)
 		}
@@ -73,7 +73,7 @@ func (conn *DatabaseConnection) GetCredential(credentialId string) (types.Creden
 	}
 
 	for results.Next() {
-		err := results.Scan(&credential.CredentialId, &credential.UserId, &credential.Username, &credential.Password, &credential.Optional, &credential.Title)
+		err := results.Scan(&credential.CredentialId, &credential.Username, &credential.Password, &credential.Optional, &credential.Title)
 		if err != nil {
 			log.Printf("Could not process the row data: %s\n", err)
 		}
