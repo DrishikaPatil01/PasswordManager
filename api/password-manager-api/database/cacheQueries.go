@@ -12,17 +12,11 @@ func (conn *DatabaseConnection) CreateSession(userId string) (string, error) {
 	sessionToken := uuid.New().String()
 	expiryTime := (time.Now().Add(10 * time.Minute)).Format(time.RFC3339)
 
-	val, err := conn.rdb.HSet(context.Background(),
+	_, err := conn.rdb.HSet(context.Background(),
 		sessionToken,
 		[]string{"userId", userId, "expiry", expiryTime}).Result()
 
-	if err != nil {
-		return "", err
-	}
-
-	fmt.Println("Val after updating session: ", val)
-
-	return sessionToken, nil
+	return sessionToken, err
 }
 
 func (conn *DatabaseConnection) UpdateSession(sessionId string) (string, error) {
@@ -32,7 +26,7 @@ func (conn *DatabaseConnection) UpdateSession(sessionId string) (string, error) 
 		sessionId,
 		[]string{"expiry", expiryTime}).Result()
 
-	return "", err
+	return sessionId, err
 }
 
 func (conn *DatabaseConnection) ValidateSession(sessionId string) (bool, string, error) {
