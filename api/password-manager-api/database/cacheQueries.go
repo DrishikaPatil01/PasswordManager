@@ -8,13 +8,13 @@ import (
 	"github.com/google/uuid"
 )
 
-func (conn *DatabaseConnection) UpdateSession(userId string) (string, error) {
-	authToken := uuid.New().String()
+func (conn *DatabaseConnection) CreateSession(userId string) (string, error) {
+	sessionToken := uuid.New().String()
 	expiryTime := (time.Now().Add(10 * time.Minute)).Format(time.RFC3339)
 
 	val, err := conn.rdb.HSet(context.Background(),
-		userId,
-		[]string{"userId", userId, "sessionToken", authToken, "expiry", expiryTime}).Result()
+		sessionToken,
+		[]string{"userId", userId, "expiry", expiryTime}).Result()
 
 	if err != nil {
 		return "", err
@@ -22,23 +22,31 @@ func (conn *DatabaseConnection) UpdateSession(userId string) (string, error) {
 
 	fmt.Println("Val after updating session: ", val)
 
-	return authToken, nil
+	return sessionToken, nil
 }
 
-func (conn *DatabaseConnection) ValidateSession(userId string, sessionId string) (bool, error) {
-	session := conn.rdb.HGetAll(context.Background(), userId).Val()
+func (conn *DatabaseConnection) UpdateSession(sessionId string) (string, error) {
+	expiryTime := (time.Now().Add(10 * time.Minute)).Format(time.RFC3339)
+
+	_, err := conn.rdb.HSet(context.Background(),
+		sessionId,
+		[]string{"expiry", expiryTime}).Result()
+
+	return "", err
+}
+
+func (conn *DatabaseConnection) ValidateSession(sessionId string) (bool, string, error) {
+	session := conn.rdb.HGetAll(context.Background(), sessionId).Val()
 
 	expiryTime, err := time.Parse(time.RFC3339, session["expiry"])
 	if err != nil {
 		fmt.Println("Error while parsing time")
-		return false, err
+		return false, "", err
 	}
 
-	if userId == session["userId"] &&
-		sessionId == session["sessionToken"] &&
-		time.Now().Before(expiryTime) {
-		return true, err
+	if time.Now().Before(expiryTime) {
+		return true, session["userId"], err
 	}
 
-	return false, nil
+	return false, "", nil
 }

@@ -31,17 +31,10 @@ func TestSessionToken(conn *database.DatabaseConnection) gin.HandlerFunc {
 			return
 		}
 
-		user, err := conn.GetUserByEmail(requestUser.Email)
-
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, err.Error())
-			return
-		}
-
 		sessionToken := c.GetHeader("SessionToken")
-		fmt.Println(user.UserId, sessionToken)
+		fmt.Println(sessionToken)
 
-		isValid, err := conn.ValidateSession(user.UserId, sessionToken)
+		isValid, _, err := conn.ValidateSession(sessionToken)
 
 		if err != nil {
 			fmt.Println("Error while validating session error:", err)

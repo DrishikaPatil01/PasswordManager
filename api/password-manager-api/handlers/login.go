@@ -30,11 +30,12 @@ func Login(conn *database.DatabaseConnection) gin.HandlerFunc {
 		requestUser.Password = utils.EncryptPassword(requestUser.Password)
 
 		if user.Password != requestUser.Password {
-			c.JSON(http.StatusBadRequest, "invalid email or password")
+			c.JSON(http.StatusUnauthorized, "invalid email or password")
 			return
 		}
 
-		sessionToken, err := conn.UpdateSession(user.UserId)
+		//Create Session
+		sessionToken, err := conn.CreateSession(user.UserId)
 
 		if err != nil {
 			fmt.Println("Error while Creating session :", err)
