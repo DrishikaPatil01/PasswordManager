@@ -37,6 +37,8 @@ func Signup(conn *database.DatabaseConnection) gin.HandlerFunc {
 			c.JSON(http.StatusOK, "added user")
 		}
 
+		conn.CreateSigningKey()
+
 	}
 
 	return gin.HandlerFunc(fn)

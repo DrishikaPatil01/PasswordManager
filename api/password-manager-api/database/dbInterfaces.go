@@ -19,4 +19,5 @@ type IUser interface {
 type ISession interface {
 	UpdateSession(string)
 	ValidateSession(string, string)
+	DeleteSession(string)
 }
