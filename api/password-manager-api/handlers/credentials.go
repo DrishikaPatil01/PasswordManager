@@ -45,18 +45,14 @@ func AddCredential(conn *database.DatabaseConnection) gin.HandlerFunc {
 
 		credentials.Password = encryptedPassword
 
-		err = conn.AddCredential(userId, &credentials)
-
-		if err != nil {
+		if err = conn.AddCredential(userId, &credentials); err != nil {
 			fmt.Println("Error while adding credentials", err)
 			c.JSON(http.StatusInternalServerError, "Error while adding credentials")
 			return
 		}
 
 		//Update Session
-		err = conn.UpdateSession(sessionToken)
-
-		if err != nil {
+		if err = conn.UpdateSession(sessionToken); err != nil {
 			fmt.Println("Error while Creating session :", err)
 			c.JSON(http.StatusInternalServerError, "Error creating session")
 			return
@@ -249,9 +245,7 @@ func DeleteCredentialsById(conn *database.DatabaseConnection) gin.HandlerFunc {
 		}
 
 		//Update Session
-		err = conn.UpdateSession(userId)
-
-		if err != nil {
+		if err = conn.UpdateSession(userId); err != nil {
 			fmt.Println("Error while Creating session :", err)
 			c.JSON(http.StatusInternalServerError, "Error creating session")
 			return
