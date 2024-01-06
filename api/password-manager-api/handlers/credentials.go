@@ -216,8 +216,6 @@ func GetCredentials(conn *database.DatabaseConnection) gin.HandlerFunc {
 func DeleteCredentialsById(conn *database.DatabaseConnection) gin.HandlerFunc {
 
 	fn := func(c *gin.Context) {
-		credentialId := c.Param("id")
-
 		//Validate Session
 		sessionToken := c.GetHeader("SessionToken")
 		isValid, userId, err := conn.ValidateSession(sessionToken)
@@ -233,8 +231,16 @@ func DeleteCredentialsById(conn *database.DatabaseConnection) gin.HandlerFunc {
 			return
 		}
 
+		var credentialIds []string
+
+		if err := c.BindJSON(&credentialIds); err != nil {
+			fmt.Println("Error while parsing request: ", err)
+			c.JSON(http.StatusInternalServerError, "Error while processing request")
+			return
+		}
+
 		//Delete Credentials By Id
-		err = conn.DeleteCredential(credentialId)
+		err = conn.DeleteCredential(credentialIds)
 
 		if err != nil {
 			fmt.Println("Error while deleting credentials: ", err)

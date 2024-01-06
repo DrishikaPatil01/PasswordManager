@@ -30,12 +30,11 @@ func main() {
 	router.POST("/user/reset-password", handlers.HealthCheck)
 
 	//Remove userId in path
-	router.GET("/user/credentials/:id", handlers.GetCredentials(&conn))           //done
-	router.GET("/user/credentials", handlers.GetAllCredentials(&conn))            //done
-	router.DELETE("/user/credentials/:id", handlers.DeleteCredentialsById(&conn)) //convert to list
-	router.DELETE("/user/credentials/", handlers.HealthCheck)
-	router.PUT("/user/credentials/:id", handlers.UpdateCredential(&conn)) //done
-	router.POST("/user/credentials", handlers.AddCredential(&conn))       //done
+	router.GET("/user/credentials/:id", handlers.GetCredentials(&conn))        //done
+	router.GET("/user/credentials", handlers.GetAllCredentials(&conn))         //done
+	router.DELETE("/user/credentials/", handlers.DeleteCredentialsById(&conn)) //convert to list
+	router.PUT("/user/credentials/:id", handlers.UpdateCredential(&conn))      //done
+	router.POST("/user/credentials", handlers.AddCredential(&conn))            //done
 
 	//TODO: Remove this later
 	router.GET("/users/getall", handlers.GetAllUsers(&conn))

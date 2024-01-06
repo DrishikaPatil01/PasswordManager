@@ -145,7 +145,7 @@
 					"raw": "{\r\n    \"user_id\": \"{{userId}}\",\r\n    \"title\": \"Emails\",\r\n    \"username\": \"example\",\r\n    \"password\": \"96967981729eeade52732d9bdf3e2f80154709da63b585dc5a3c31d53ca6c7dc\",\r\n    \"optional\": \"gmail, yahoo, hotmail\"\r\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/user/{{userId}}/credentials",
+					"raw": "http://localhost:8080/user/credentials",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -153,7 +153,6 @@
 					"port": "8080",
 					"path": [
 						"user",
-						"{{userId}}",
 						"credentials"
 					]
 				}
@@ -194,7 +193,7 @@
 					"raw": "// {\r\n//     \"user_id\": \"{{userId}}\",\r\n//     \"title\": \"Emails\",\r\n//     \"username\": \"example\",\r\n//     \"password\": \"96967981729eeade52732d9bdf3e2f80154709da63b585dc5a3c31d53ca6c7dc\",\r\n//     \"optional\": \"gmail, yahoo, hotmail\"\r\n// }"
 				},
 				"url": {
-					"raw": "http://localhost:8080/user/{{userId}}/credentials",
+					"raw": "http://localhost:8080/user/credentials",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -202,7 +201,6 @@
 					"port": "8080",
 					"path": [
 						"user",
-						"{{userId}}",
 						"credentials"
 					]
 				}
@@ -243,7 +241,7 @@
 					"raw": "// {\r\n//     \"user_id\": \"{{userId}}\",\r\n//     \"title\": \"Emails\",\r\n//     \"username\": \"example\",\r\n//     \"password\": \"96967981729eeade52732d9bdf3e2f80154709da63b585dc5a3c31d53ca6c7dc\",\r\n//     \"optional\": \"gmail, yahoo, hotmail\"\r\n// }"
 				},
 				"url": {
-					"raw": "http://localhost:8080/user/{{userId}}/credentials/e7f1cc12-3b0d-4128-a575-45753ee12002",
+					"raw": "http://localhost:8080/user/credentials/c2f3d3c4-0231-4d44-ba4e-de119fa17059",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -251,9 +249,8 @@
 					"port": "8080",
 					"path": [
 						"user",
-						"{{userId}}",
 						"credentials",
-						"e7f1cc12-3b0d-4128-a575-45753ee12002"
+						"c2f3d3c4-0231-4d44-ba4e-de119fa17059"
 					]
 				}
 			},
@@ -291,7 +288,7 @@
 					"raw": "{\r\n    \"user_id\": \"{{userId}}\",\r\n    \"title\": \"gaming-site\",\r\n    \"username\": \"gamer101\",\r\n    \"password\": \"96967981729eeade52732d9bdf3e2f80154709da63b585dc5a3c31d53ca6c7dc\",\r\n    \"optional\": \"xbox\"\r\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/user/{{userId}}/credentials/0384e790-bc9f-43cd-92d6-d17b80d4e13e",
+					"raw": "http://localhost:8080/user/credentials/c2f3d3c4-0231-4d44-ba4e-de119fa17059",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -299,9 +296,8 @@
 					"port": "8080",
 					"path": [
 						"user",
-						"{{userId}}",
 						"credentials",
-						"0384e790-bc9f-43cd-92d6-d17b80d4e13e"
+						"c2f3d3c4-0231-4d44-ba4e-de119fa17059"
 					]
 				}
 			},
@@ -320,11 +316,8 @@
 					}
 				}
 			],
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
-				"method": "GET",
+				"method": "DELETE",
 				"header": [
 					{
 						"key": "Content-Type",
@@ -341,7 +334,7 @@
 					"raw": "// {\r\n//     \"user_id\": \"{{userId}}\",\r\n//     \"title\": \"Emails\",\r\n//     \"username\": \"example\",\r\n//     \"password\": \"96967981729eeade52732d9bdf3e2f80154709da63b585dc5a3c31d53ca6c7dc\",\r\n//     \"optional\": \"gmail, yahoo, hotmail\"\r\n// }"
 				},
 				"url": {
-					"raw": "http://localhost:8080/user/{{userId}}/credentials/e7f1cc12-3b0d-4128-a575-45753ee12002",
+					"raw": "http://localhost:8080/user/credentials/c2f3d3c4-0231-4d44-ba4e-de119fa17059",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -349,9 +342,8 @@
 					"port": "8080",
 					"path": [
 						"user",
-						"{{userId}}",
 						"credentials",
-						"e7f1cc12-3b0d-4128-a575-45753ee12002"
+						"c2f3d3c4-0231-4d44-ba4e-de119fa17059"
 					]
 				}
 			},

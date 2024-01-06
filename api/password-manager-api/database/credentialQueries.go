@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"log"
+	"strings"
 
 	"password-manager-service/types"
 	"password-manager-service/utils"
@@ -16,7 +17,7 @@ const (
 	queryCredentialsById string = "SELECT CREDENTIAL_ID, USERNAME, PASSWORD, OPTIONAL, TITLE FROM CREDENTIALS WHERE CREDENTIAL_ID=?"
 	insertCredential     string = "INSERT INTO CREDENTIALS (CREDENTIAL_ID, USER_ID, USERNAME, PASSWORD, OPTIONAL, TITLE) VALUES (?, ?, ?, ?, ?, ?)"
 	updateCredential     string = "UPDATE CREDENTIALS SET USERNAME=?, PASSWORD=?, OPTIONAL=?, TITLE=? WHERE CREDENTIAL_ID=?"
-	deleteCredential     string = "DELETE FROM CREDENTIALS WHERE CREDENTIAL_ID=?"
+	deleteCredential     string = "DELETE FROM CREDENTIALS WHERE CREDENTIAL_ID in(?)"
 )
 
 func (conn *DatabaseConnection) AddCredential(userId string, credentials *types.CredentialData) error {
@@ -89,9 +90,9 @@ func (conn *DatabaseConnection) GetCredential(credentialId string) (types.Creden
 	return credential, nil
 }
 
-func (conn *DatabaseConnection) DeleteCredential(credentialId string) error {
+func (conn *DatabaseConnection) DeleteCredential(credentialIds []string) error {
 
-	_, err := conn.db.Query(deleteCredential, credentialId)
+	_, err := conn.db.Query(deleteCredential, strings.Join(credentialIds, ","))
 
 	return err
 }
