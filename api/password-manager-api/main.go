@@ -24,10 +24,10 @@ func main() {
 
 	router.GET("/health", handlers.HealthCheck)
 	router.POST("/signup", handlers.Signup(&conn))
-	router.POST("/forgot-password", handlers.HealthCheck)
+	router.POST("/forgot-password", handlers.ForgotPassword(&conn))
 	router.PUT("/login", handlers.Login(&conn))
-	router.DELETE("/user/logout", handlers.HealthCheck)
-	router.POST("/user/reset-password", handlers.HealthCheck)
+	router.DELETE("/user/logout", handlers.Logout(&conn))
+	router.POST("/user/reset-password", handlers.ResetPassword(&conn))
 
 	//Remove userId in path
 	router.GET("/user/credentials/:id", handlers.GetCredentials(&conn))

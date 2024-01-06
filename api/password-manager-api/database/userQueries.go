@@ -1,6 +1,7 @@
 package database
 
 import (
+	"context"
 	"log"
 
 	"password-manager-service/types"
@@ -10,9 +11,10 @@ import (
 )
 
 const (
-	queryAllUsersData string = "SELECT USER_ID, EMAIL_ID, USERNAME, PASSWORD FROM USER"
-	queryUserByEmail  string = "SELECT * FROM USER WHERE EMAIL_ID = ?"
-	insertUser        string = "INSERT INTO USER (USER_ID, EMAIL_ID, USERNAME, PASSWORD) VALUES (?, ?, ?, ?)"
+	queryAllUsersData  string = "SELECT USER_ID, EMAIL_ID, USERNAME, PASSWORD FROM USER"
+	queryUserByEmail   string = "SELECT * FROM USER WHERE EMAIL_ID = ?"
+	insertUser         string = "INSERT INTO USER (USER_ID, EMAIL_ID, USERNAME, PASSWORD) VALUES (?, ?, ?, ?)"
+	updateUserPassword string = "UPDATE USER SET PASSWORD=? WHERE USER_ID=?"
 )
 
 func (conn *DatabaseConnection) GetAllUsers() ([]types.UserData, error) {
@@ -80,4 +82,11 @@ func (conn *DatabaseConnection) GetUserByEmail(email string) (types.UserData, er
 	}
 
 	return user, err
+}
+
+func (conn *DatabaseConnection) UpdateUserPassword(userId string, password string) error {
+
+	_, err := conn.db.ExecContext(context.Background(), updateUserPassword, password, userId)
+
+	return err
 }

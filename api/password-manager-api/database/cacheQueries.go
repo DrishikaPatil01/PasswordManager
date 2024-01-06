@@ -9,24 +9,24 @@ import (
 )
 
 func (conn *DatabaseConnection) CreateSession(userId string) (string, error) {
-	sessionToken := uuid.New().String()
-	expiryTime := (time.Now().Add(10 * time.Minute)).Format(time.RFC3339)
-
-	_, err := conn.rdb.HSet(context.Background(),
-		sessionToken,
-		[]string{"userId", userId, "expiry", expiryTime}).Result()
-
-	return sessionToken, err
-}
-
-func (conn *DatabaseConnection) UpdateSession(sessionId string) error {
+	sessionId := uuid.New().String()
 	expiryTime := (time.Now().Add(10 * time.Minute)).Format(time.RFC3339)
 
 	_, err := conn.rdb.HSet(context.Background(),
 		sessionId,
+		[]string{"userId", userId, "expiry", expiryTime}).Result()
+
+	return sessionId, err
+}
+
+func (conn *DatabaseConnection) UpdateSession(sessionId string) (err error) {
+	expiryTime := (time.Now().Add(10 * time.Minute)).Format(time.RFC3339)
+
+	_, err = conn.rdb.HSet(context.Background(),
+		sessionId,
 		[]string{"expiry", expiryTime}).Result()
 
-	return err
+	return
 }
 
 func (conn *DatabaseConnection) ValidateSession(sessionId string) (bool, string, error) {
@@ -43,4 +43,13 @@ func (conn *DatabaseConnection) ValidateSession(sessionId string) (bool, string,
 	}
 
 	return false, "", nil
+}
+
+func (conn *DatabaseConnection) DeleteSession(sessionId string) (err error) {
+
+	_, err = conn.rdb.HDel(context.Background(),
+		sessionId,
+		"userId", "expiry").Result()
+
+	return
 }
