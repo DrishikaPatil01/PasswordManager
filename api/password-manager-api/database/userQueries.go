@@ -7,7 +7,6 @@ import (
 	"password-manager-service/types"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/google/uuid"
 )
 
 const (
@@ -55,8 +54,6 @@ func (conn *DatabaseConnection) CheckEmailExists(email string) (bool, error) {
 
 func (conn *DatabaseConnection) AddUser(user types.UserData) error {
 
-	user.UserId = uuid.New().String()
-
 	// query := fmt.Sprintf("SELECT * FROM USER WHERE USERNAME = '?'", uname)
 	_, err := conn.db.Query(insertUser, user.UserId, user.Email, user.Username, user.Password)
 
@@ -89,4 +86,17 @@ func (conn *DatabaseConnection) UpdateUserPassword(userId string, password strin
 	_, err := conn.db.ExecContext(context.Background(), updateUserPassword, password, userId)
 
 	return err
+}
+
+func (conn *DatabaseConnection) CreateSigningKey(userId string, signingKey string) {
+
+	conn.rdb.Set(context.Background(), userId, signingKey, 0)
+
+}
+
+func (conn *DatabaseConnection) GetSigningKey(userId string) (signingKey string) {
+
+	signingKey = conn.rdb.Get(context.Background(), userId).Val()
+
+	return
 }

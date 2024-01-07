@@ -14,6 +14,7 @@ type IUser interface {
 	GetUser(string, string)
 	DeleteUser(string, string)
 	UpdateUser(string, string)
+	CreateSigningKey(string)
 }
 
 type ISession interface {

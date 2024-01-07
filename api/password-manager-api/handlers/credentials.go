@@ -22,21 +22,17 @@ func AddCredential(conn *database.DatabaseConnection) gin.HandlerFunc {
 
 		//Validate Session
 		sessionToken := c.GetHeader("SessionToken")
-		isValid, userId, err := conn.ValidateSession(sessionToken)
-
-		if err != nil {
-			fmt.Println("Error while validating session error:", err)
-			c.JSON(http.StatusInternalServerError, "Error while validating token")
-			return
-		}
+		isValid, userId := conn.ValidateSession(sessionToken)
 
 		if !isValid {
 			c.JSON(http.StatusUnauthorized, "Invalid Session token")
 			return
 		}
 
+		signingKey := conn.GetSigningKey(userId)
+
 		//Add Credentials
-		encryptedPassword, err := utils.EncryptCredentialsPassword(credentials.Password)
+		encryptedPassword, err := utils.EncryptCredentialsPassword(credentials.Password, signingKey)
 
 		if err != nil {
 			fmt.Println("Error while encrypting password", err)
@@ -52,11 +48,7 @@ func AddCredential(conn *database.DatabaseConnection) gin.HandlerFunc {
 		}
 
 		//Update Session
-		if err = conn.UpdateSession(sessionToken); err != nil {
-			fmt.Println("Error while Creating session :", err)
-			c.JSON(http.StatusInternalServerError, "Error creating session")
-			return
-		}
+		conn.UpdateSession(sessionToken)
 
 		c.Writer.Header().Set("SessionToken", sessionToken)
 		c.JSON(http.StatusCreated, "Added Credentials")
@@ -78,21 +70,17 @@ func UpdateCredential(conn *database.DatabaseConnection) gin.HandlerFunc {
 
 		//Validate Session
 		sessionToken := c.GetHeader("SessionToken")
-		isValid, _, err := conn.ValidateSession(sessionToken)
-
-		if err != nil {
-			fmt.Println("Error while validating session error:", err)
-			c.JSON(http.StatusInternalServerError, "Error while validating token")
-			return
-		}
+		isValid, userId := conn.ValidateSession(sessionToken)
 
 		if !isValid {
 			c.JSON(http.StatusUnauthorized, "Invalid Session token")
 			return
 		}
 
+		signingKey := conn.GetSigningKey(userId)
+
 		//Update Credentials
-		encryptedPassword, err := utils.EncryptCredentialsPassword(credentials.Password)
+		encryptedPassword, err := utils.EncryptCredentialsPassword(credentials.Password, signingKey)
 
 		if err != nil {
 			fmt.Println("Error while encrypting password", err)
@@ -108,11 +96,7 @@ func UpdateCredential(conn *database.DatabaseConnection) gin.HandlerFunc {
 		}
 
 		//Update Session
-		if err = conn.UpdateSession(sessionToken); err != nil {
-			fmt.Println("Error while Creating session :", err)
-			c.JSON(http.StatusInternalServerError, "Error creating session")
-			return
-		}
+		conn.UpdateSession(sessionToken)
 
 		c.Writer.Header().Set("SessionToken", sessionToken)
 		c.JSON(http.StatusCreated, "Updated Credentials")
@@ -126,13 +110,7 @@ func GetAllCredentials(conn *database.DatabaseConnection) gin.HandlerFunc {
 
 		//Validate Session
 		sessionToken := c.GetHeader("SessionToken")
-		isValid, userId, err := conn.ValidateSession(sessionToken)
-
-		if err != nil {
-			fmt.Println("Error while validating session error:", err)
-			c.JSON(http.StatusInternalServerError, "Error while validating token")
-			return
-		}
+		isValid, userId := conn.ValidateSession(sessionToken)
 
 		if !isValid {
 			c.JSON(http.StatusUnauthorized, "Invalid Session token")
@@ -149,11 +127,7 @@ func GetAllCredentials(conn *database.DatabaseConnection) gin.HandlerFunc {
 		}
 
 		//Update Session
-		if err := conn.UpdateSession(userId); err != nil {
-			fmt.Println("Error while Creating session :", err)
-			c.JSON(http.StatusInternalServerError, "Error creating session")
-			return
-		}
+		conn.UpdateSession(userId)
 
 		c.Writer.Header().Set("SessionToken", sessionToken)
 		c.JSON(http.StatusCreated, credentials)
@@ -168,13 +142,7 @@ func GetCredentials(conn *database.DatabaseConnection) gin.HandlerFunc {
 
 		//Validate Session
 		sessionToken := c.GetHeader("SessionToken")
-		isValid, _, err := conn.ValidateSession(sessionToken)
-
-		if err != nil {
-			fmt.Println("Error while validating session error:", err)
-			c.JSON(http.StatusInternalServerError, "Error while validating token")
-			return
-		}
+		isValid, _ := conn.ValidateSession(sessionToken)
 
 		if !isValid {
 			c.JSON(http.StatusUnauthorized, "Invalid Session token")
@@ -191,11 +159,7 @@ func GetCredentials(conn *database.DatabaseConnection) gin.HandlerFunc {
 		}
 
 		//Update Session
-		if err = conn.UpdateSession(sessionToken); err != nil {
-			fmt.Println("Error while Creating session :", err)
-			c.JSON(http.StatusInternalServerError, "Error creating session")
-			return
-		}
+		conn.UpdateSession(sessionToken)
 
 		c.Writer.Header().Set("SessionToken", sessionToken)
 
@@ -214,13 +178,7 @@ func DeleteCredentialsById(conn *database.DatabaseConnection) gin.HandlerFunc {
 	fn := func(c *gin.Context) {
 		//Validate Session
 		sessionToken := c.GetHeader("SessionToken")
-		isValid, userId, err := conn.ValidateSession(sessionToken)
-
-		if err != nil {
-			fmt.Println("Error while validating session error:", err)
-			c.JSON(http.StatusInternalServerError, "Error while validating token")
-			return
-		}
+		isValid, userId := conn.ValidateSession(sessionToken)
 
 		if !isValid {
 			c.JSON(http.StatusUnauthorized, "Invalid Session token")
@@ -236,20 +194,10 @@ func DeleteCredentialsById(conn *database.DatabaseConnection) gin.HandlerFunc {
 		}
 
 		//Delete Credentials By Id
-		err = conn.DeleteCredential(credentialIds)
-
-		if err != nil {
-			fmt.Println("Error while deleting credentials: ", err)
-			c.JSON(http.StatusInternalServerError, "Error while fetching credentials")
-			return
-		}
+		conn.DeleteCredential(credentialIds)
 
 		//Update Session
-		if err = conn.UpdateSession(userId); err != nil {
-			fmt.Println("Error while Creating session :", err)
-			c.JSON(http.StatusInternalServerError, "Error creating session")
-			return
-		}
+		conn.UpdateSession(userId)
 
 		c.Writer.Header().Set("SessionToken", sessionToken)
 		c.JSON(http.StatusOK, "Deleted Credentials")

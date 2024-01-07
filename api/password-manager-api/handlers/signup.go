@@ -1,12 +1,14 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"password-manager-service/database"
 	"password-manager-service/types"
 	"password-manager-service/utils"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func Signup(conn *database.DatabaseConnection) gin.HandlerFunc {
@@ -30,14 +32,19 @@ func Signup(conn *database.DatabaseConnection) gin.HandlerFunc {
 			return
 		}
 
+		user.UserId = uuid.New().String()
+
 		user.Password = utils.EncryptUserPassword(user.Password)
 		if err := conn.AddUser(user); err != nil {
 			c.JSON(http.StatusInternalServerError, "error occured while adding user")
-		} else {
-			c.JSON(http.StatusOK, "added user")
 		}
 
-		conn.CreateSigningKey()
+		signingKey := utils.GenerateSigningKey()
+		fmt.Println("Signing key : ", signingKey)
+
+		conn.CreateSigningKey(user.UserId, signingKey)
+
+		c.JSON(http.StatusOK, "added user")
 
 	}
 

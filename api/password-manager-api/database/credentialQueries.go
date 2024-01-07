@@ -45,20 +45,22 @@ func (conn *DatabaseConnection) GetAllCredentials(userId string) ([]types.Creden
 		return credentials, err
 	}
 
+	signingKey := conn.GetSigningKey(userId)
+
 	for results.Next() {
 		var credential types.CredentialData
 
 		err := results.Scan(&credential.CredentialId, &credential.Username, &credential.Password, &credential.Optional, &credential.Title)
 		if err != nil {
 			log.Printf("Could not process the row data: %s\n", err)
-			break;
+			break
 		}
 
-		credential.Password, err = utils.DecryptCredentialsPassword(credential.Password)
+		credential.Password, err = utils.DecryptCredentialsPassword(credential.Password, signingKey)
 
 		if err != nil {
 			log.Printf("Could not decrypt the password: %s\n", err)
-			break;
+			break
 		}
 
 		credentials = append(credentials, credential)
@@ -82,7 +84,9 @@ func (conn *DatabaseConnection) GetCredential(credentialId string) (types.Creden
 			break
 		}
 
-		credential.Password, err = utils.DecryptCredentialsPassword(credential.Password)
+		signingKey := conn.GetSigningKey(credential.UserId)
+
+		credential.Password, err = utils.DecryptCredentialsPassword(credential.Password, signingKey)
 
 		if err != nil {
 			log.Printf("Could not decrypt the password: %s\n", err)

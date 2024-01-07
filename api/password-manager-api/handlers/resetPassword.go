@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"password-manager-service/database"
 	"password-manager-service/types"
@@ -21,13 +20,7 @@ func ResetPassword(conn *database.DatabaseConnection) gin.HandlerFunc {
 
 		//Validate Session
 		sessionToken := c.GetHeader("SessionToken")
-		isValid, userId, err := conn.ValidateSession(sessionToken)
-
-		if err != nil {
-			fmt.Println("Error while validating session error:", err)
-			c.JSON(http.StatusInternalServerError, "Error while validating token")
-			return
-		}
+		isValid, userId := conn.ValidateSession(sessionToken)
 
 		if !isValid {
 			c.JSON(http.StatusUnauthorized, "Invalid Session token")
@@ -43,11 +36,7 @@ func ResetPassword(conn *database.DatabaseConnection) gin.HandlerFunc {
 		}
 
 		//Update Session
-		if err = conn.UpdateSession(sessionToken); err != nil {
-			fmt.Println("Error while Creating session :", err)
-			c.JSON(http.StatusInternalServerError, "Error creating session")
-			return
-		}
+		conn.UpdateSession(sessionToken)
 
 		c.Writer.Header().Set("SessionToken", sessionToken)
 		c.JSON(http.StatusOK, "Successfully reset password")

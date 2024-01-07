@@ -3,14 +3,13 @@ package utils
 import (
 	"crypto/aes"
 	"crypto/cipher"
-	"crypto/rand"
 	"crypto/sha256"
 	"encoding/base64"
 	"fmt"
-	"os"
+	"math/rand"
 )
 
-var secretKey string = os.Getenv("SECRET_KEY")
+var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
 
 func EncryptUserPassword(password string) string {
 	h := sha256.New()
@@ -21,7 +20,7 @@ func EncryptUserPassword(password string) string {
 	return fmt.Sprintf("%x", bs)
 }
 
-func EncryptCredentialsPassword(plaintext string) (string, error) {
+func EncryptCredentialsPassword(plaintext string, secretKey string) (string, error) {
 
 	aes, err := aes.NewCipher([]byte(secretKey))
 	if err != nil {
@@ -49,7 +48,7 @@ func EncryptCredentialsPassword(plaintext string) (string, error) {
 	return cipherstring, nil
 }
 
-func DecryptCredentialsPassword(cipherstring string) (string, error) {
+func DecryptCredentialsPassword(cipherstring string, secretKey string) (string, error) {
 	aes, err := aes.NewCipher([]byte(secretKey))
 	if err != nil {
 		fmt.Println("Error while forming aes cipher")
@@ -79,4 +78,12 @@ func DecryptCredentialsPassword(cipherstring string) (string, error) {
 	}
 
 	return string(plaintext), nil
+}
+
+func GenerateSigningKey() string {
+	signingKey := make([]rune, 32)
+	for i := range signingKey {
+		signingKey[i] = letters[rand.Intn(len(letters))]
+	}
+	return string(signingKey)
 }

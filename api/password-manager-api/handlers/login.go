@@ -35,7 +35,7 @@ func Login(conn *database.DatabaseConnection) gin.HandlerFunc {
 		}
 
 		//Create Session
-		sessionToken, err := conn.CreateSession(user.UserId)
+		sessionToken := conn.CreateSession(user.UserId)
 
 		if err != nil {
 			fmt.Println("Error while Creating session :", err)

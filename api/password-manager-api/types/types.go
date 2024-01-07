@@ -13,4 +13,5 @@ type CredentialData struct {
 	Username     string `json:"username"`
 	Password     string `json:"password"`
 	Optional     string `json:"optional"`
+	UserId       string `json:"-"`
 }
