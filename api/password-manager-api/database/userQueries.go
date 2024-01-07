@@ -1,18 +1,19 @@
 package database
 
 import (
+	"context"
 	"log"
 
 	"password-manager-service/types"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/google/uuid"
 )
 
 const (
-	queryAllUsersData string = "SELECT USER_ID, EMAIL_ID, USERNAME, PASSWORD FROM USER"
-	queryUserByEmail  string = "SELECT * FROM USER WHERE EMAIL_ID = ?"
-	insertUser        string = "INSERT INTO USER (USER_ID, EMAIL_ID, USERNAME, PASSWORD) VALUES (?, ?, ?, ?)"
+	queryAllUsersData  string = "SELECT USER_ID, EMAIL_ID, USERNAME, PASSWORD FROM USER"
+	queryUserByEmail   string = "SELECT * FROM USER WHERE EMAIL_ID = ?"
+	insertUser         string = "INSERT INTO USER (USER_ID, EMAIL_ID, USERNAME, PASSWORD) VALUES (?, ?, ?, ?)"
+	updateUserPassword string = "UPDATE USER SET PASSWORD=? WHERE USER_ID=?"
 )
 
 func (conn *DatabaseConnection) GetAllUsers() ([]types.UserData, error) {
@@ -53,8 +54,6 @@ func (conn *DatabaseConnection) CheckEmailExists(email string) (bool, error) {
 
 func (conn *DatabaseConnection) AddUser(user types.UserData) error {
 
-	user.UserId = uuid.New().String()
-
 	// query := fmt.Sprintf("SELECT * FROM USER WHERE USERNAME = '?'", uname)
 	_, err := conn.db.Query(insertUser, user.UserId, user.Email, user.Username, user.Password)
 
@@ -80,4 +79,24 @@ func (conn *DatabaseConnection) GetUserByEmail(email string) (types.UserData, er
 	}
 
 	return user, err
+}
+
+func (conn *DatabaseConnection) UpdateUserPassword(userId string, password string) error {
+
+	_, err := conn.db.ExecContext(context.Background(), updateUserPassword, password, userId)
+
+	return err
+}
+
+func (conn *DatabaseConnection) CreateSigningKey(userId string, signingKey string) {
+
+	conn.rdb.Set(context.Background(), userId, signingKey, 0)
+
+}
+
+func (conn *DatabaseConnection) GetSigningKey(userId string) (signingKey string) {
+
+	signingKey = conn.rdb.Get(context.Background(), userId).Val()
+
+	return
 }
