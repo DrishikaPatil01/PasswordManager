@@ -15,3 +15,12 @@ type CredentialData struct {
 	Optional     string `json:"optional"`
 	UserId       string `json:"-"`
 }
+
+type EmailConfigData struct {
+	Email       string
+	Password    string
+	SmtpHost    string
+	SmtpPort    string
+	MimeHeaders string
+	UIUrl       string
+}

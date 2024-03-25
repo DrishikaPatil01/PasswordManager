@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"password-manager-service/database"
 	"password-manager-service/types"
@@ -31,15 +32,18 @@ func ForgotPassword(conn *database.DatabaseConnection) gin.HandlerFunc {
 			return
 		}
 
-		user.Password = utils.EncryptUserPassword(requestUser.Password)
+		//create new sessionToken
+		sessionToken := conn.CreateSession(user.UserId)
 
-		//reset password sent in request
-		if err := conn.UpdateUserPassword(user.UserId, user.Password); err != nil {
-			c.JSON(http.StatusInternalServerError, "error occured while resetting password")
+		if err != nil {
+			fmt.Println("Error while Creating session :", err)
+			c.JSON(http.StatusInternalServerError, "Error creating session")
 			return
 		}
 
-		c.JSON(http.StatusOK, "Successfully reset password")
+		utils.SendResetPasswordEmail(user.Email, sessionToken)
+
+		c.JSON(http.StatusOK, "Successfully sent email too reset password")
 	}
 
 	return gin.HandlerFunc(fn)
