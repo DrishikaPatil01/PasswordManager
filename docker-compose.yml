@@ -34,8 +34,8 @@ services:
       REDIS_LINK: cache:6379
       REDIS_PASSWORD: cache
       SECRET_KEY: N1PCdw3M2B1TfJhoaY2mL736p2vCUc47
-      EMAIL: dpprojects952@gmail.com
-      EMAIL_KEY: zfdg hlkl xggu udig
+      EMAIL: addUrEmail
+      EMAIL_KEY: addUrEmailKey
       SMTP_HOST: smtp.gmail.com
       SMTP_PORT: 587
       UI_URL: http://localhost:3000

@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"password-manager-service/database"
 	"password-manager-service/types"
@@ -40,7 +39,6 @@ func Signup(conn *database.DatabaseConnection) gin.HandlerFunc {
 		}
 
 		signingKey := utils.GenerateSigningKey()
-		fmt.Println("Signing key : ", signingKey)
 
 		conn.CreateSigningKey(user.UserId, signingKey)
 

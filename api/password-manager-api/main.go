@@ -29,7 +29,6 @@ func main() {
 	router.DELETE("/user/logout", handlers.Logout(&conn))
 	router.POST("/user/reset-password", handlers.ResetPassword(&conn))
 
-	//Remove userId in path
 	router.GET("/user/credentials/:id", handlers.GetCredentials(&conn))
 	router.GET("/user/credentials", handlers.GetAllCredentials(&conn))
 	router.DELETE("/user/credentials/", handlers.DeleteCredentialsById(&conn))

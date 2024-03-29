@@ -50,7 +50,6 @@ func AddCredential(conn *database.DatabaseConnection) gin.HandlerFunc {
 		//Update Session
 		conn.UpdateSession(sessionToken)
 
-		c.Writer.Header().Set("SessionToken", sessionToken)
 		c.JSON(http.StatusCreated, "Added Credentials")
 	}
 	return gin.HandlerFunc(fn)
@@ -98,7 +97,6 @@ func UpdateCredential(conn *database.DatabaseConnection) gin.HandlerFunc {
 		//Update Session
 		conn.UpdateSession(sessionToken)
 
-		c.Writer.Header().Set("SessionToken", sessionToken)
 		c.JSON(http.StatusCreated, "Updated Credentials")
 	}
 	return gin.HandlerFunc(fn)
@@ -129,7 +127,6 @@ func GetAllCredentials(conn *database.DatabaseConnection) gin.HandlerFunc {
 		//Update Session
 		conn.UpdateSession(userId)
 
-		c.Writer.Header().Set("SessionToken", sessionToken)
 		c.JSON(http.StatusCreated, credentials)
 	}
 	return gin.HandlerFunc(fn)
@@ -160,8 +157,6 @@ func GetCredentials(conn *database.DatabaseConnection) gin.HandlerFunc {
 
 		//Update Session
 		conn.UpdateSession(sessionToken)
-
-		c.Writer.Header().Set("SessionToken", sessionToken)
 
 		if (types.CredentialData{}) == credential {
 			c.JSON(http.StatusNoContent, "No credentials found with this id")
@@ -199,7 +194,6 @@ func DeleteCredentialsById(conn *database.DatabaseConnection) gin.HandlerFunc {
 		//Update Session
 		conn.UpdateSession(userId)
 
-		c.Writer.Header().Set("SessionToken", sessionToken)
 		c.JSON(http.StatusOK, "Deleted Credentials")
 	}
 	return gin.HandlerFunc(fn)
