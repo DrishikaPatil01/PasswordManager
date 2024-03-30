@@ -14,15 +14,19 @@ func AddCredential(conn *database.DatabaseConnection) gin.HandlerFunc {
 
 	fn := func(c *gin.Context) {
 		var credentials types.CredentialData
-
 		if err := c.BindJSON(&credentials); err != nil {
 			c.JSON(http.StatusBadRequest, "could not process request")
 			return
 		}
 
+		var headers types.Headers
+		if err := c.ShouldBindHeader(&headers); err != nil {
+			c.JSON(400, err.Error())
+			return
+		}
+
 		//Validate Session
-		sessionToken := c.GetHeader("SessionToken")
-		isValid, userId := conn.ValidateSession(sessionToken)
+		isValid, userId := conn.ValidateSession(headers.SessionToken)
 
 		if !isValid {
 			c.JSON(http.StatusUnauthorized, "Invalid Session token")
@@ -48,7 +52,7 @@ func AddCredential(conn *database.DatabaseConnection) gin.HandlerFunc {
 		}
 
 		//Update Session
-		conn.UpdateSession(sessionToken)
+		conn.UpdateSession(headers.SessionToken)
 
 		c.JSON(http.StatusCreated, "Added Credentials")
 	}
@@ -68,8 +72,12 @@ func UpdateCredential(conn *database.DatabaseConnection) gin.HandlerFunc {
 		credentials.CredentialId = c.Param("id")
 
 		//Validate Session
-		sessionToken := c.GetHeader("SessionToken")
-		isValid, userId := conn.ValidateSession(sessionToken)
+		var headers types.Headers
+		if err := c.ShouldBindHeader(&headers); err != nil {
+			c.JSON(400, err.Error())
+			return
+		}
+		isValid, userId := conn.ValidateSession(headers.SessionToken)
 
 		if !isValid {
 			c.JSON(http.StatusUnauthorized, "Invalid Session token")
@@ -95,7 +103,7 @@ func UpdateCredential(conn *database.DatabaseConnection) gin.HandlerFunc {
 		}
 
 		//Update Session
-		conn.UpdateSession(sessionToken)
+		conn.UpdateSession(headers.SessionToken)
 
 		c.JSON(http.StatusCreated, "Updated Credentials")
 	}
@@ -107,8 +115,12 @@ func GetAllCredentials(conn *database.DatabaseConnection) gin.HandlerFunc {
 	fn := func(c *gin.Context) {
 
 		//Validate Session
-		sessionToken := c.GetHeader("SessionToken")
-		isValid, userId := conn.ValidateSession(sessionToken)
+		var headers types.Headers
+		if err := c.ShouldBindHeader(&headers); err != nil {
+			c.JSON(400, err.Error())
+			return
+		}
+		isValid, userId := conn.ValidateSession(headers.SessionToken)
 
 		if !isValid {
 			c.JSON(http.StatusUnauthorized, "Invalid Session token")
@@ -125,7 +137,7 @@ func GetAllCredentials(conn *database.DatabaseConnection) gin.HandlerFunc {
 		}
 
 		//Update Session
-		conn.UpdateSession(userId)
+		conn.UpdateSession(headers.SessionToken)
 
 		c.JSON(http.StatusCreated, credentials)
 	}
@@ -138,8 +150,12 @@ func GetCredentials(conn *database.DatabaseConnection) gin.HandlerFunc {
 		credentialId := c.Param("id")
 
 		//Validate Session
-		sessionToken := c.GetHeader("SessionToken")
-		isValid, _ := conn.ValidateSession(sessionToken)
+		var headers types.Headers
+		if err := c.ShouldBindHeader(&headers); err != nil {
+			c.JSON(400, err.Error())
+			return
+		}
+		isValid, _ := conn.ValidateSession(headers.SessionToken)
 
 		if !isValid {
 			c.JSON(http.StatusUnauthorized, "Invalid Session token")
@@ -156,7 +172,7 @@ func GetCredentials(conn *database.DatabaseConnection) gin.HandlerFunc {
 		}
 
 		//Update Session
-		conn.UpdateSession(sessionToken)
+		conn.UpdateSession(headers.SessionToken)
 
 		if (types.CredentialData{}) == credential {
 			c.JSON(http.StatusNoContent, "No credentials found with this id")
@@ -172,8 +188,12 @@ func DeleteCredentialsById(conn *database.DatabaseConnection) gin.HandlerFunc {
 
 	fn := func(c *gin.Context) {
 		//Validate Session
-		sessionToken := c.GetHeader("SessionToken")
-		isValid, userId := conn.ValidateSession(sessionToken)
+		var headers types.Headers
+		if err := c.ShouldBindHeader(&headers); err != nil {
+			c.JSON(400, err.Error())
+			return
+		}
+		isValid, _:= conn.ValidateSession(headers.SessionToken)
 
 		if !isValid {
 			c.JSON(http.StatusUnauthorized, "Invalid Session token")
@@ -192,7 +212,7 @@ func DeleteCredentialsById(conn *database.DatabaseConnection) gin.HandlerFunc {
 		conn.DeleteCredential(credentialIds)
 
 		//Update Session
-		conn.UpdateSession(userId)
+		conn.UpdateSession(headers.SessionToken)
 
 		c.JSON(http.StatusOK, "Deleted Credentials")
 	}
