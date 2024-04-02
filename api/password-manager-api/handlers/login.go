@@ -27,7 +27,7 @@ func Login(conn *database.DatabaseConnection) gin.HandlerFunc {
 			return
 		}
 
-		requestUser.Password = utils.EncryptPassword(requestUser.Password)
+		requestUser.Password = utils.EncryptUserPassword(requestUser.Password)
 
 		if user.Password != requestUser.Password {
 			c.JSON(http.StatusUnauthorized, "invalid email or password")
@@ -35,7 +35,7 @@ func Login(conn *database.DatabaseConnection) gin.HandlerFunc {
 		}
 
 		//Create Session
-		sessionToken, err := conn.CreateSession(user.UserId)
+		sessionToken := conn.CreateSession(user.UserId)
 
 		if err != nil {
 			fmt.Println("Error while Creating session :", err)

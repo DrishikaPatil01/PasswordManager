@@ -34,12 +34,7 @@ func TestSessionToken(conn *database.DatabaseConnection) gin.HandlerFunc {
 		sessionToken := c.GetHeader("SessionToken")
 		fmt.Println(sessionToken)
 
-		isValid, _, err := conn.ValidateSession(sessionToken)
-
-		if err != nil {
-			fmt.Println("Error while validating session error:", err)
-			c.JSON(http.StatusInternalServerError, "Error while validating token")
-		}
+		isValid, _ := conn.ValidateSession(sessionToken)
 
 		if !isValid {
 			c.JSON(http.StatusUnauthorized, "Invalid Session token")

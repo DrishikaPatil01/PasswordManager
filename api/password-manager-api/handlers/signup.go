@@ -7,6 +7,7 @@ import (
 	"password-manager-service/utils"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func Signup(conn *database.DatabaseConnection) gin.HandlerFunc {
@@ -30,12 +31,18 @@ func Signup(conn *database.DatabaseConnection) gin.HandlerFunc {
 			return
 		}
 
-		user.Password = utils.EncryptPassword(user.Password)
+		user.UserId = uuid.New().String()
+
+		user.Password = utils.EncryptUserPassword(user.Password)
 		if err := conn.AddUser(user); err != nil {
 			c.JSON(http.StatusInternalServerError, "error occured while adding user")
-		} else {
-			c.JSON(http.StatusOK, "added user")
 		}
+
+		signingKey := utils.GenerateSigningKey()
+
+		conn.CreateSigningKey(user.UserId, signingKey)
+
+		c.JSON(http.StatusOK, "added user")
 
 	}
 
